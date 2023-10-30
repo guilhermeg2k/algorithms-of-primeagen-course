@@ -1,19 +1,19 @@
 const std = @import("std");
 const expect = std.testing.expect;
 
+fn Matrix(comptime T: type) type {
+    return [MAZE_ROWS][MAZE_COLS]T;
+}
+
+const Maze = Matrix(u8);
+const Seen = Matrix(bool);
+
 const Point = struct { x: i32 = 0, y: i32 = 0 };
 const DIRECTIONS = [_][2]i32{ .{ 0, 1 }, .{ 0, -1 }, .{ 1, 0 }, .{ -1, 0 } };
 const MAZE_COLS = 12;
 const MAZE_ROWS = 6;
 
-fn Maze(comptime T: type) type {
-    return [MAZE_ROWS][MAZE_COLS]T;
-}
-
-const MazeU8 = Maze(u8);
-const MazeBool = Maze(bool);
-
-fn walk(maze: MazeU8, wall: u8, curr: Point, end: Point, seen: *MazeBool, path: *std.ArrayList(Point)) !bool {
+fn walk(maze: Maze, wall: u8, curr: Point, end: Point, seen: *Seen, path: *std.ArrayList(Point)) !bool {
     const out_of_maze = curr.x < 0 or curr.x > maze[0].len or curr.y < 0 or curr.y > maze.len;
     const x: usize = @intCast(curr.x);
     const y: usize = @intCast(curr.y);
@@ -49,19 +49,18 @@ fn walk(maze: MazeU8, wall: u8, curr: Point, end: Point, seen: *MazeBool, path: 
     }
 
     _ = path.pop();
-
     return false;
 }
 
-fn solve(maze: MazeU8, wall: u8, start: Point, end: Point, allocator: std.mem.Allocator) !std.ArrayList(Point) {
+fn solve(maze: Maze, wall: u8, start: Point, end: Point, allocator: std.mem.Allocator) !std.ArrayList(Point) {
     var path = std.ArrayList(Point).init(allocator);
-    var seen = std.mem.zeroes(MazeBool);
+    var seen = std.mem.zeroes(Seen);
     _ = try walk(maze, wall, start, end, &seen, &path);
     return path;
 }
 
 test "Maze Solver" {
-    const maze = [_][12]u8{
+    const maze = [MAZE_ROWS][MAZE_COLS]u8{
         [_]u8{
             'x',
             'x',
