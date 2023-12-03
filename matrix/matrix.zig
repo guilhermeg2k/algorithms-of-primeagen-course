@@ -5,7 +5,6 @@ const MatrixError = error{InvalidIndex};
 fn Matrix(comptime T: type) type {
     return struct {
         const Self = @This();
-
         width: usize,
         height: usize,
         internal_array: []T,
