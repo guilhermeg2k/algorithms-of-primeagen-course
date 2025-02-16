@@ -1,7 +1,7 @@
 const std = @import("std");
 const expect = std.testing.expect;
 
-fn Queue(comptime T: type) type {
+pub fn Queue(comptime T: type) type {
     const Node = struct {
         const Self = @This();
 
@@ -17,7 +17,7 @@ fn Queue(comptime T: type) type {
         alloc: std.mem.Allocator,
 
         fn init(alloc: std.mem.Allocator) Self {
-            return .{ .alloc = alloc, .len = 0, .head = null, .tail = null };
+            return Self{ .alloc = alloc, .len = 0, .head = null, .tail = null };
         }
 
         fn deinit(self: *Self) void {
@@ -77,7 +77,7 @@ test "Queue" {
     try expect(queue.peek() == 1);
 
     //Simple enq
-    var v = queue.deque();
+    const v = queue.deque();
     try expect(v == 1);
 
     //Multiple enqs
