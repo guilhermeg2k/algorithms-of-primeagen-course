@@ -16,11 +16,11 @@ pub fn Queue(comptime T: type) type {
         tail: ?*Node,
         alloc: std.mem.Allocator,
 
-        fn init(alloc: std.mem.Allocator) Self {
+        pub fn init(alloc: std.mem.Allocator) Self {
             return Self{ .alloc = alloc, .len = 0, .head = null, .tail = null };
         }
 
-        fn deinit(self: *Self) void {
+        pub fn deinit(self: *Self) void {
             while (self.head) |curr| {
                 const next = curr.next;
                 self.alloc.destroy(curr);
@@ -28,14 +28,14 @@ pub fn Queue(comptime T: type) type {
             }
         }
 
-        fn peek(self: *Self) ?T {
+        pub fn peek(self: *Self) ?T {
             if (self.head) |head| {
                 return head.value;
             }
             return null;
         }
 
-        fn enqueue(self: *Self, item: T) !void {
+        pub fn enqueue(self: *Self, item: T) !void {
             const node = try self.alloc.create(Node);
             node.value = item;
             node.next = null;
@@ -50,7 +50,7 @@ pub fn Queue(comptime T: type) type {
             self.len += 1;
         }
 
-        fn deque(self: *Self) ?T {
+        pub fn deque(self: *Self) ?T {
             if (self.len == 0) return null;
 
             const head = self.head;
