@@ -22,6 +22,7 @@ fn bfs(tree: *const I32BTree, search: i32) !bool {
 
     var queue = BTreeQueue.init(std.testing.allocator);
     defer queue.deinit();
+
     try queue.enqueue(tree);
 
     while (queue.len != 0) {
@@ -44,7 +45,7 @@ fn bfs(tree: *const I32BTree, search: i32) !bool {
     return false;
 }
 
-test "BTree" {
+test "BFS" {
     var node0: I32BTree = .{ .value = 10 };
     var node1: I32BTree = .{ .value = 8 };
     var node2: I32BTree = .{ .value = 9, .right = &node0 };

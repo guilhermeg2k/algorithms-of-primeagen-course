@@ -32,7 +32,7 @@ fn BTree(comptime T: type) type {
     };
 }
 
-test "BTree" {
+test "DF transverse" {
     var node1: I32BTree = .{ .value = 8 };
     var node2: I32BTree = .{ .value = 9 };
     var node3: I32BTree = .{ .value = 6, .left = &node1, .right = &node2 };
